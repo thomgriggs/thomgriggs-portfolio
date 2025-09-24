@@ -17,12 +17,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="font-sans">
         <nav className="sticky top-0 z-50 backdrop-blur-md bg-surface/70 border-b border-white/10">
           <div className="container flex items-center justify-between py-3">
-            <div className="brand">
+            <Link href="/" className="brand no-underline text-inherit">
               <span className="brand-mark">TG</span>
               <span className="font-serif text-lg font-semibold tracking-wide">Thom Griggs</span>
-            </div>
+            </Link>
             <div className="flex items-center gap-2">
               <Link className="btn" href="/projects">Projects</Link>
+              <Link className="btn" href="/about">About</Link>
+              <Link className="btn" href="/contact">Contact</Link>
             </div>
           </div>
         </nav>
