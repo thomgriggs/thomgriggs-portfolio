@@ -1,51 +1,79 @@
 @import 'tailwindcss';
 
 /* ---- tokens ---- */
-:root{
-  --bg: 12 12 14;
-  --surface: 20 20 25;
-  --fg: 245 246 248;
-  --muted: 165 170 179;
+:root {
+	--bg: 12 12 14;
+	--surface: 20 20 25;
+	--fg: 245 246 248;
+	--muted: 165 170 179;
 
-  --primary: 110 231 255;
-  --secondary: 102 255 166;
-  --accent: 255 190 11;
+	--primary: 110 231 255;
+	--secondary: 102 255 166;
+	--accent: 255 190 11;
 
-  --radius-app: 16px;
-  --radius-card: 14px;
-  --shadow-soft: 0 1px 2px rgba(0,0,0,.2), 0 8px 24px rgba(0,0,0,.22);
+	--radius-app: 16px;
+	--radius-card: 14px;
+	--shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.2), 0 8px 24px rgba(0, 0, 0, 0.22);
 }
 
 /* ---- tailwind v4 tokens ---- */
-@theme{
-  --color-bg: rgb(var(--bg));
-  --color-surface: rgb(var(--surface));
-  --color-fg: rgb(var(--fg));
-  --color-muted: rgb(var(--muted));
-  --color-primary: rgb(var(--primary));
-  --color-secondary: rgb(var(--secondary));
-  --color-accent: rgb(var(--accent));
-  --radius-app: var(--radius-app);
-  --radius-card: var(--radius-card);
+@theme {
+	--color-bg: rgb(var(--bg));
+	--color-surface: rgb(var(--surface));
+	--color-fg: rgb(var(--fg));
+	--color-muted: rgb(var(--muted));
+	--color-primary: rgb(var(--primary));
+	--color-secondary: rgb(var(--secondary));
+	--color-accent: rgb(var(--accent));
+	--radius-app: var(--radius-app);
+	--radius-card: var(--radius-card);
 }
 
 /* ---- base ---- */
-html,body{ @apply bg-bg text-fg min-h-screen m-0; }
-.container{ @apply mx-auto max-w-[1200px] w-full px-6; }
+html,
+body {
+	@apply bg-bg text-fg m-0 min-h-screen;
+}
+.container {
+	@apply mx-auto w-full max-w-[1200px] px-6;
+}
 
 /* ---- components ---- */
-@layer components{
-  .btn{ @apply inline-flex items-center gap-2 rounded-full border border-white/20 px-4 py-2 text-sm transition hover:border-white/40; }
-  /* no @apply btn here—repeat the utilities */
-  .btn-primary{ @apply inline-flex items-center gap-2 rounded-full border border-white/20 px-4 py-2 text-sm transition hover:border-white/40; background: rgb(var(--primary)); color:#0a0a0a; }
-  .card{ @apply bg-surface border border-white/10 rounded-[var(--radius-card)] grid gap-3 p-4; box-shadow: var(--shadow-soft); }
-  .grid-12{ @apply grid gap-4 grid-cols-12; }
-  .brand{ @apply inline-flex items-center gap-2; }
-  .brand-mark{
-    @apply inline-flex h-8 w-8 items-center justify-center rounded-xl font-extrabold;
-    background: linear-gradient(135deg, rgb(var(--primary)), rgb(var(--secondary)));
-    color:#0a0a0a;
-  }
-  .h1{ @apply font-serif leading-tight; font-size: clamp(36px,5vw,64px); }
-  .eyebrow{ @apply text-xs tracking-wide uppercase text-muted; letter-spacing:.12em }
+@layer components {
+	.btn {
+		@apply inline-flex items-center gap-2 rounded-full border border-white/20 px-4 py-2 text-sm transition hover:border-white/40;
+	}
+	/* no @apply btn here—repeat the utilities */
+	.btn-primary {
+		@apply inline-flex items-center gap-2 rounded-full border border-white/20 px-4 py-2 text-sm transition hover:border-white/40;
+		background: rgb(var(--primary));
+		color: #0a0a0a;
+	}
+	.card {
+		@apply bg-surface grid gap-3 rounded-[var(--radius-card)] border border-white/10 p-4;
+		box-shadow: var(--shadow-soft);
+	}
+	.grid-12 {
+		@apply grid grid-cols-12 gap-4;
+	}
+	.brand {
+		@apply inline-flex items-center gap-2;
+	}
+	.brand-mark {
+		@apply inline-flex h-8 w-8 items-center justify-center rounded-xl font-extrabold;
+		background: linear-gradient(
+			135deg,
+			rgb(var(--primary)),
+			rgb(var(--secondary))
+		);
+		color: #0a0a0a;
+	}
+	.h1 {
+		@apply font-serif leading-tight;
+		font-size: clamp(36px, 5vw, 64px);
+	}
+	.eyebrow {
+		@apply text-muted text-xs tracking-wide uppercase;
+		letter-spacing: 0.12em;
+	}
 }

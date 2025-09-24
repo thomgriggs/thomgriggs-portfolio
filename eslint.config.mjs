@@ -1,25 +1,13 @@
-import { dirname } from 'path';
-import { fileURLToPath } from 'url';
-import { FlatCompat } from '@eslint/eslintrc';
+import next from 'eslint-config-next';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const compat = new FlatCompat({
-	baseDirectory: __dirname,
-});
-
-const eslintConfig = [
-	...compat.extends('next/core-web-vitals', 'next/typescript'),
+export default [
+	...next(),
 	{
-		ignores: [
-			'node_modules/**',
-			'.next/**',
-			'out/**',
-			'build/**',
-			'next-env.d.ts',
-		],
+		rules: {
+			// keep @next/next/link rule on (you already fixed anchors)
+			'@next/next/no-html-link-for-pages': 'error',
+			// useful with Tailwind: disallow @apply to custom classes = handled in CSS now
+			// we simply avoid it by convention; no extra plugin needed
+		},
 	},
 ];
-
-export default eslintConfig;

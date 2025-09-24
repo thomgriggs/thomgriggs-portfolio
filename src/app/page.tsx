@@ -28,9 +28,9 @@ export default function Page() {
 						<div className="card aspect-[4/3]" />
 					</aside>
 				</div>
-			<div className="p-4 mt-4 card">Tailwind OK</div>
-      <div className="p-4 mt-4 card">Tailwind OK</div>
-      </Section>
+				<div className="card mt-4 p-4">Tailwind OK</div>
+				<div className="card mt-4 p-4">Tailwind OK</div>
+			</Section>
 		</>
 	);
 }
