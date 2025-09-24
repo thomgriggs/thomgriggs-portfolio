@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import Link from 'next/link'
 import { getProjectBySlug } from '@/lib/sanity.queries'
 
 export const revalidate = 300
@@ -8,7 +9,7 @@ export default async function ProjectDetail({ params }: { params: { slug: string
   if (!p) return <div>Not found</div>
   return (
     <article>
-      <a href="/projects">← Back to projects</a>
+      <Link href="/projects">← Back to projects</Link>
       <h1 className="font-serif" style={{ fontSize: 'clamp(28px,4vw,48px)', margin: '8px 0' }}>{p.title}</h1>
       <p className="text-muted">{p.year}{p.role ? ` • ${p.role}` : ''}</p>
       {p.coverImage?.asset?.url ? (
