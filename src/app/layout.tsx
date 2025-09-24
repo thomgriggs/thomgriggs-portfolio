@@ -8,16 +8,16 @@ const noto = Noto_Serif({ subsets: ['latin'], variable: '--font-serif' })
 
 export const metadata: Metadata = {
   title: 'Thom Griggs • Front-End Developer',
-  description: 'Responsive, performant, accessible web experiences.'
+  description: 'Responsive, performant, accessible web experiences.',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${inter.variable} ${noto.variable}`}>
       <body className="font-sans">
-        <nav className="sticky top-0 z-50 backdrop-blur-md bg-surface/70 border-b border-white/10">
+        <nav className="bg-surface/70 sticky top-0 z-50 border-b border-white/10 backdrop-blur-md">
           <div className="container flex items-center justify-between py-3">
-            <Link href="/" className="brand no-underline text-inherit">
+            <Link href="/" className="brand text-inherit no-underline">
               <span className="brand-mark">TG</span>
               <span className="font-serif text-lg font-semibold tracking-wide">Thom Griggs</span>
             </Link>
