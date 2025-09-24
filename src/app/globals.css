@@ -1,87 +1,51 @@
-:root {
-	--bg: #0b0b0d;
-	--surface: #131318;
-	--fg: #f5f6f8;
-	--muted: #a8acb3;
-	--primary: #6ee7ff;
-	--secondary: #66ffa6;
-	--radius: 16px;
+@import 'tailwindcss';
+
+/* Your raw design tokens (keep these numbers, swap later with Figma values) */
+:root{
+  --bg: 12 12 14;
+  --surface: 20 20 25;
+  --fg: 245 246 248;
+  --muted: 165 170 179;
+
+  --primary: 110 231 255;
+  --secondary: 102 255 166;
+
+  --radius-app: 16px;
+  --container: 1200px;
 }
-* {
-	box-sizing: border-box;
+
+/* Tailwind v4 token mapping — this is what generates bg-bg, text-fg, rounded-app, max-w-[1200px], etc. */
+@theme {
+  --color-bg: rgb(var(--bg));
+  --color-surface: rgb(var(--surface));
+  --color-fg: rgb(var(--fg));
+  --color-muted: rgb(var(--muted));
+  --color-primary: rgb(var(--primary));
+  --color-secondary: rgb(var(--secondary));
+
+  --radius-app: var(--radius-app);
+  --max-w-[1200px]: var(--container);
+
+  /* Hook next/font variables into Tailwind's font utilities */
+  --font-sans: var(--font-sans);
+  --font-serif: var(--font-serif);
 }
-html,
-body {
-	background: var(--bg);
-	color: var(--fg);
-	font-family:
-		Inter,
-		system-ui,
-		-apple-system,
-		Segoe UI,
-		Roboto,
-		Arial,
-		sans-serif;
-	margin: 0;
-	min-height: 100vh;
-}
-.container {
-	margin: 0 auto;
-	max-width: 1200px;
-	padding: 24px;
-	width: 100%;
-}
-nav {
-	align-items: center;
-	backdrop-filter: blur(8px) saturate(120%);
-	background: rgba(19, 19, 24, 0.6);
-	border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-	display: flex;
-	gap: 16px;
-	justify-content: space-between;
-	left: 0;
-	padding: 12px 24px;
-	position: sticky;
-	top: 0;
-	z-index: 50;
-}
-.brand {
-	align-items: center;
-	display: flex;
-	gap: 10px;
-}
-.brand-mark {
-	align-items: center;
-	background: linear-gradient(135deg, var(--primary), var(--secondary));
-	border-radius: 10px;
-	color: #0a0a0a;
-	display: inline-flex;
-	font-weight: 800;
-	height: 32px;
-	justify-content: center;
-	width: 32px;
-}
-.brand-name {
-	font-family: 'Noto Serif', Georgia, serif;
-	font-size: 18px;
-	font-weight: 600;
-	letter-spacing: 0.3px;
-}
-.grid {
-	display: grid;
-	gap: 16px;
-	grid-template-columns: repeat(12, 1fr);
-}
-.card {
-	background: var(--surface);
-	border: 1px solid rgba(255, 255, 255, 0.06);
-	border-radius: var(--radius);
-	display: grid;
-	gap: 12px;
-	padding: 14px;
-}
-.footer {
-	color: var(--muted);
-	font-size: 14px;
-	padding: 24px;
+
+/* Base layout helpers */
+html,body{ @apply bg-bg text-fg min-h-screen m-0; }
+.container{ @apply mx-auto max-w-[1200px] w-full px-6; }
+
+/* Small component layer to avoid utility soup */
+@layer components{
+  .btn{ @apply inline-flex items-center gap-2 rounded-full border border-white/20 px-4 py-2 text-sm transition hover:border-white/40; }
+  .card{ @apply bg-surface border border-white/10 rounded-app grid gap-3 p-4; }
+  .badge{ @apply inline-flex items-center rounded-md border border-white/15 bg-white/5 px-2.5 py-1 text-xs; }
+  .grid-12{ @apply grid gap-4 grid-cols-12; }
+  .brand{ @apply inline-flex items-center gap-2; }
+  .brand-mark{
+    @apply inline-flex h-8 w-8 items-center justify-center rounded-xl font-extrabold;
+    background: linear-gradient(135deg, rgb(var(--primary)), rgb(var(--secondary)));
+    color:#0a0a0a;
+  }
+  .h1{ @apply font-serif leading-tight; font-size: clamp(36px,5vw,64px); }
 }
