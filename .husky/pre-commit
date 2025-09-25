@@ -1,2 +1,2 @@
-#!/usr/bin/env sh
-npm run format && npm run typecheck
+npm run format
+npm run check

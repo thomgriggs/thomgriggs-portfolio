@@ -1,17 +1,11 @@
-import { vi } from 'vitest';
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import Page from '../page';
-
-vi.mock('next/link', () => ({
-	default: ({ href, children, ...props }: any) => (
-		<a href={href} {...props}>
-			{children}
-		</a>
-	),
-}));
+import { HomeContent } from '@/app/components/HomeContent';
 
 test('home renders and shows nav links', () => {
-	render(<Page />);
+	render(<HomeContent />);
 	expect(screen.getByText(/Front-end developer/i)).toBeInTheDocument();
+	expect(screen.getByRole('link', { name: /projects/i })).toBeInTheDocument();
+	expect(screen.getByRole('link', { name: /about/i })).toBeInTheDocument();
+	expect(screen.getByRole('link', { name: /contact/i })).toBeInTheDocument();
 });
