@@ -1,8 +1,8 @@
-import { client } from './sanity.client'
+import { client } from './sanity.client';
 
 /** -------- PROJECTS -------- */
 export async function getAllProjects() {
-  return client.fetch(`
+	return client.fetch(`
     *[_type=="project"]|order(coalesce(orderRank, _createdAt) asc){
       _id,
       title,
@@ -15,13 +15,13 @@ export async function getAllProjects() {
       links[]{label, url},
       coverImage{ "asset": { "url": asset->url }, alt }
     }
-  `)
+  `);
 }
 
 export async function getProjectBySlug(slug: string) {
-  if (!slug) return null
-  return client.fetch(
-    `
+	if (!slug) return null;
+	return client.fetch(
+		`
     *[_type=="project" && slug.current==$slug][0]{
       _id,
       title,
@@ -40,32 +40,32 @@ export async function getProjectBySlug(slug: string) {
       }
     }
   `,
-    { slug }
-  )
+		{ slug }
+	);
 }
 
 /** -------- SITE SETTINGS -------- */
 export async function getSiteSettings() {
-  return client.fetch(`*[_type=="siteSettings"][0]{
+	return client.fetch(`*[_type=="siteSettings"][0]{
     title,
     "navLinks": coalesce(navLinks[], []){
       label, href
     },
     footerNote
-  }`)
+  }`);
 }
 
 /** -------- PAGES -------- */
 export async function getHomePage() {
-  return client.fetch(`*[_type=="homePage"][0]{
+	return client.fetch(`*[_type=="homePage"][0]{
     heroTitle,
     heroSubtitle,
     ctas[] { label, href }
-  }`)
+  }`);
 }
 
 export async function getAboutPage() {
-  return client.fetch(`*[_type=="aboutPage"][0]{
+	return client.fetch(`*[_type=="aboutPage"][0]{
     title,
     body,
     portrait{
@@ -73,12 +73,12 @@ export async function getAboutPage() {
       alt
     },
     links[] { label, href }
-  }`)
+  }`);
 }
 
 export async function getContactPage() {
-  return client.fetch(`*[_type=="contactPage"][0]{
+	return client.fetch(`*[_type=="contactPage"][0]{
     title,
     contacts[]{ label, value, href }
-  }`)
+  }`);
 }
