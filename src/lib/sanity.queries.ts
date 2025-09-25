@@ -1,54 +1,84 @@
-import { client } from './sanity.client';
+import { client } from './sanity.client'
 
+/** -------- PROJECTS -------- */
 export async function getAllProjects() {
-	return client.fetch(`*[_type=="project"]|order(coalesce(order, _createdAt) desc){
-    _id, title, "slug": slug.current, year, company, role, summary, stack,
-    "coverImage": {"url": coverImage.asset->url},
-    "gallery": gallery[]{ "url": asset->url, alt }
-  }`);
+  return client.fetch(`
+    *[_type=="project"]|order(coalesce(orderRank, _createdAt) asc){
+      _id,
+      title,
+      "slug": slug.current,
+      year,
+      company,
+      role,
+      summary,
+      stack[],
+      links[]{label, url},
+      coverImage{ "asset": { "url": asset->url }, alt }
+    }
+  `)
 }
 
 export async function getProjectBySlug(slug: string) {
-	return client.fetch(
-		`*[_type=="project" && slug.current==$slug][0]{
-    _id, title, "slug": slug.current, year, company, role, summary, stack,
-    links[]{label, url},
-    "coverImage": {"url": coverImage.asset->url, alt},
-    "gallery": gallery[]{ "url": asset->url, alt }
-  }`,
-		{ slug }
-	);
-}
-
-export async function getAllProjectSlugs() {
-	return client.fetch(
-		`*[_type=="project" && defined(slug.current)][].slug.current`
-	);
-}
-
-export async function getSiteSettings() {
-	return client.fetch(`*[_type=="siteSettings"][0]{title,navLinks,footerNote}`);
-}
-
-export async function getHomePage() {
-	return client.fetch(`*[_type=="homePage"][0]{
-    heroEyebrow,heroTitle,heroSubtitle,
-    ctaPrimaryLabel,ctaPrimaryUrl,ctaSecondaryLabel,ctaSecondaryUrl,
-    "featuredProjects": featuredProjects[]->{
-      _id, title, "slug": slug.current, year, company, role,
-      summary, stack, "coverImage": {"url": coverImage.asset->url}
+  if (!slug) return null
+  return client.fetch(
+    `
+    *[_type=="project" && slug.current==$slug][0]{
+      _id,
+      title,
+      "slug": slug.current,
+      year,
+      company,
+      role,
+      summary,
+      stack[],
+      links[]{label, url},
+      coverImage{ "asset": { "url": asset->url }, alt },
+      gallery[]{
+        ...,
+        "asset": { "url": asset->url },
+        alt
+      }
     }
-  }`);
+  `,
+    { slug }
+  )
+}
+
+/** -------- SITE SETTINGS -------- */
+export async function getSiteSettings() {
+  return client.fetch(`*[_type=="siteSettings"][0]{
+    title,
+    "navLinks": coalesce(navLinks[], []){
+      label, href
+    },
+    footerNote
+  }`)
+}
+
+/** -------- PAGES -------- */
+export async function getHomePage() {
+  return client.fetch(`*[_type=="homePage"][0]{
+    heroTitle,
+    heroSubtitle,
+    ctas[] { label, href }
+  }`)
 }
 
 export async function getAboutPage() {
-	return client.fetch(`*[_type=="aboutPage"][0]{
+  return client.fetch(`*[_type=="aboutPage"][0]{
     title,
-    "portrait": { "url": portrait.asset->url, alt: portrait.alt },
-    body
-  }`);
+    body,
+    portrait{
+      "url": asset->url,
+      alt
+    },
+    links[] { label, href }
+  }`)
 }
 
 export async function getContactPage() {
-	return client.fetch(`*[_type=="contactPage"][0]{ title, body, contacts }`);
+  return client.fetch(`*[_type=="contactPage"][0]{
+    title,
+    contacts[]{ label, value, href }
+  }`)
 }
