@@ -1,26 +1,84 @@
-import groq from 'groq'
-import { client } from './sanity.client'
-import type { Project } from './types'
+import { client } from './sanity.client';
 
-const PROJECT_FIELDS = groq`{
-	_id,
-	title,
-	year,
-	role,
-	slug,
-	summary,
-	stack,
-	metrics,
-	coverImage{ asset-> { url } },
-	gallery[]{ asset-> { url } }
-}`
-
-export async function getAllProjects(): Promise<Project[]> {
-	const query = groq`*[_type == "project"]|order(year desc)${PROJECT_FIELDS}`
-	return await client.fetch(query)
+/** -------- PROJECTS -------- */
+export async function getAllProjects() {
+	return client.fetch(`
+    *[_type=="project"]|order(coalesce(orderRank, _createdAt) asc){
+      _id,
+      title,
+      "slug": slug.current,
+      year,
+      company,
+      role,
+      summary,
+      stack[],
+      links[]{label, url},
+      coverImage{ "asset": { "url": asset->url }, alt }
+    }
+  `);
 }
 
-export async function getProjectBySlug(slug: string): Promise<Project | null> {
-	const query = groq`*[_type == "project" && slug.current == $slug][0]${PROJECT_FIELDS}`
-	return await client.fetch(query, { slug })
+export async function getProjectBySlug(slug: string) {
+	if (!slug) return null;
+	return client.fetch(
+		`
+    *[_type=="project" && slug.current==$slug][0]{
+      _id,
+      title,
+      "slug": slug.current,
+      year,
+      company,
+      role,
+      summary,
+      stack[],
+      links[]{label, url},
+      coverImage{ "asset": { "url": asset->url }, alt },
+      gallery[]{
+        ...,
+        "asset": { "url": asset->url },
+        alt
+      }
+    }
+  `,
+		{ slug }
+	);
+}
+
+/** -------- SITE SETTINGS -------- */
+export async function getSiteSettings() {
+	return client.fetch(`*[_type=="siteSettings"][0]{
+    title,
+    "navLinks": coalesce(navLinks[], []){
+      label, href
+    },
+    footerNote
+  }`);
+}
+
+/** -------- PAGES -------- */
+export async function getHomePage() {
+	return client.fetch(`*[_type=="homePage"][0]{
+    heroTitle,
+    heroSubtitle,
+    ctas[] { label, href }
+  }`);
+}
+
+export async function getAboutPage() {
+	return client.fetch(`*[_type=="aboutPage"][0]{
+    title,
+    body,
+    portrait{
+      "url": asset->url,
+      alt
+    },
+    links[] { label, href }
+  }`);
+}
+
+export async function getContactPage() {
+	return client.fetch(`*[_type=="contactPage"][0]{
+    title,
+    contacts[]{ label, value, href }
+  }`);
 }
