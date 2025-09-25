@@ -1,17 +1,28 @@
-import { Section } from '../components/Section';
+import { getContactPage } from '@/lib/sanity.queries'
+import { Section } from '@/app/components/Section'
+import { PortableText } from 'next-sanity'
 
-export const metadata = { title: 'Contact — Thom Griggs' };
+export const revalidate = 300
 
-export default function Contact() {
-	return (
-		<Section>
-			<h1 className="m-0 mb-3 font-serif text-[32px]">Contact</h1>
-			<p className="text-muted">
-				Reach me at{' '}
-				<a className="underline" href="mailto:thomgriggs@gmail.com">
-					thomgriggs@gmail.com
-				</a>
-			</p>
-		</Section>
-	);
+export default async function ContactPage(){
+  const c = await getContactPage()
+  return (
+    <Section>
+      <h1 className="h1">{c?.title}</h1>
+      <div className="grid grid-cols-12 gap-6 mt-4">
+        <div className="col-span-12 lg:col-span-8">
+          {c?.body ? <PortableText value={c.body} /> : null}
+        </div>
+        <div className="col-span-12 lg:col-span-4">
+          <div className="grid gap-2">
+            {Array.isArray(c?.contacts) ? c.contacts.map((row: {label?:string;value?:string;url?:string}, i:number)=>(
+              <a key={i} className="btn" href={row?.url||'#'} target={row?.url ? '_blank':'_self'} rel="noreferrer">
+                {row?.label||''}{row?.value?`: ${row.value}`:''}
+              </a>
+            )):null}
+          </div>
+        </div>
+      </div>
+    </Section>
+  )
 }
